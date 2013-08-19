@@ -1,0 +1,11 @@
+#!/bin/sh
+r=$(vagrant status 2>/dev/null| grep running | grep -v not)
+if [ -n "$r" ];then
+   echo "do vagrant halt before exporting..."
+   exit
+fi
+IFS=$'\n'
+for vmx in $(find .vagrant -name '*.vmx');do
+   vm=$(echo $vmx|cut -d '/' -f 3)
+   echo ovftool "$vmx" $vm.ova
+done
